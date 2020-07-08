@@ -2,6 +2,7 @@ var ultimaLettura = new Date();
 var speech;
 var loop;
 var val = false;
+var messaggi_whatsapp = [];
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse)=>{
     switch (msg.text){
@@ -29,6 +30,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse)=>{
         case "pitch":
             speech.setPitch(msg.value);
             break;
+
+        case "whatsapp":
+            messaggi_whatsapp.push(msg);
+            break;
     }
 });
 
@@ -42,6 +47,12 @@ function leggi(messaggi){
         }
     }
     ultimaLettura = new Date();
+    while (messaggi_whatsapp.length>0){
+        let msg = messaggi_whatsapp.shift();
+        let text = msg.nick + " dice: " + msg.msg;
+        speech.speak(text);
+        console.log(text);
+    }
 }
 
 
