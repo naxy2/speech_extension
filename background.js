@@ -1,18 +1,35 @@
 var ultimaLettura = new Date();
-var speech = new p5.Speech();
-speech.onLoad = imposta;
+var speech;
 var loop;
 var val = false;
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse)=>{
-    if (!val){
-        loop = setInterval(controlla, 2500);
-        console.log("inizio");
-    }else{
-        clearInterval(loop);
-        console.log("fine");
+    switch (msg.text){
+        case "premuto":
+            if (!val){
+                loop = setInterval(controlla, 2500);
+                console.log("inizio");
+
+                speech = new p5.Speech();
+                speech.onLoad = imposta;
+                speech.onLoad();
+            }else{
+                speech.stop();
+                speech = undefined;
+                clearInterval(loop);
+                console.log("fine");
+            }
+            val = !val;
+            break;
+        
+        case "ragguaglio":
+            sendResponse(val);
+            break;
+
+        case "pitch":
+            speech.setPitch(msg.value);
+            break;
     }
-    val = !val;
 });
 
 
