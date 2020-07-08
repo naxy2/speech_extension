@@ -173,13 +173,9 @@
 			return goAgain(() => { start(chats, cnt + 1) }, 0.1);
 		}
 
-
-
-		
-		// that's sad, there's not to send back...
 		
         ignoreLastMsg[title] = lastMsg;
-        if (!lastMsg.endsWith("sta scrivendo")){
+        if (!lastMsg.endsWith("sta scrivendo") & !lastMsg.endsWith("sta scrivendo...")){
             console.log('new message arrived -> ', title, lastMsg);
             chrome.runtime.sendMessage({
                 text: "whatsapp",
